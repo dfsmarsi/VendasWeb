@@ -7,5 +7,6 @@ namespace VendasWeb
 {
     public class Class
     {
+        public int MyProperty { get; set; }
     }
 }
