@@ -17,7 +17,8 @@ namespace VendasWeb.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Aplicativo de vendas Web exemplo do curso de OO com C#";
+            ViewData["Proprietario"] = "Douglas Smarsi";
 
             return View();
         }
