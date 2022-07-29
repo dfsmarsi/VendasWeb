@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Microsoft.EntityFrameworkCore;
 using VendasWeb.Models;
 
-namespace VendasWeb.Data
+namespace VendasWeb.Models
 {
     public class VendasWebContext : DbContext
     {
@@ -14,6 +11,8 @@ namespace VendasWeb.Data
         {
         }
 
-        public DbSet<VendasWeb.Models.Departamento> Departamento { get; set; }
+        public DbSet<Departamento> Departamento { get; set; }
+        public DbSet<Vendedor> Vendedor { get; set; }
+        public DbSet<Venda> Venda { get; set; }
     }
 }
