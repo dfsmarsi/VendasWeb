@@ -37,6 +37,24 @@ namespace VendasWeb.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Excluir(int? id)
+        {
+            if (id == null)
+                return NotFound();
+            var obj = _vendedorService.ProcurarPorID(id.Value);
+            if (obj == null)
+                return NotFound();
+            
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Excluir(int id)
+        {
+            _vendedorService.ExcluirVendedor(id);
+            return RedirectToAction(nameof(Index));
+        }
 
     }
 }
