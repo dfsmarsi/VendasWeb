@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using VendasWeb.Models.Enums;
 
 namespace VendasWeb.Models
@@ -6,7 +7,11 @@ namespace VendasWeb.Models
     public class Venda
     {
         public int Id { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DataVenda { get; set; }
+
+        [DisplayFormat(DataFormatString ="{0:F2}")]
         public double Valor { get; set; }
         public VendaStatus Status { get; set; }
         public Vendedor Vendedor { get; set; }

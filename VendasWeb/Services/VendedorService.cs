@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using VendasWeb.Models;
+using VendasWeb.Services.Exceptions;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace VendasWeb.Services
 {
@@ -13,27 +16,50 @@ namespace VendasWeb.Services
             _context = context;
         }
 
-        public List<Vendedor> ProcurarTodos()
+        public async Task<List<Vendedor>> ProcurarTodosAsync()
         {
-            return _context.Vendedor.ToList();
+            return await _context.Vendedor.ToListAsync();
         }
 
-        public void InserirVendedor(Vendedor vendedor)
+        public async Task InserirVendedorAsync(Vendedor vendedor)
         {
             _context.Add(vendedor);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Vendedor ProcurarPorID(int id)
+        public async Task<Vendedor> ProcurarPorIDAsync(int id)
         {
-            return _context.Vendedor.FirstOrDefault(obj => obj.Id == id);
+            return await _context.Vendedor.Include(obj => obj.Departamento).FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
-        public void ExcluirVendedor(int id)
+        public async Task ExcluirVendedorAsync(int id)
         {
-            var obj = _context.Vendedor.Find(id);
-            _context.Vendedor.Remove(obj);
-            _context.SaveChanges();
+            try
+            {
+                var obj = await _context.Vendedor.FindAsync(id);
+                _context.Vendedor.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new IntegrityException(ex.Message);
+            }
+        }
+
+        public async Task AtualizarVendedorAsync(Vendedor vendedor)
+        {
+            bool possuiRegistro = await _context.Vendedor.AnyAsync(x => x.Id == vendedor.Id);
+            if (!possuiRegistro)
+                throw new NotFoundException("Id não encontrado");
+            try
+            {
+                _context.Update(vendedor);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbConcurrencyException ex)
+            {
+                throw new DbConcurrencyException(ex.Message);
+            }
         }
     }
 }
