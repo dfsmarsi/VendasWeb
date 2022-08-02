@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VendasWeb.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace VendasWeb.Services
 { 
@@ -15,9 +15,9 @@ namespace VendasWeb.Services
             _context = context;
         }
 
-        public List<Departamento> ListarDepartamentos()
+        public async Task<List<Departamento>> ListarDepartamentosAsync()
         {
-            return _context.Departamento.OrderBy(dep => dep.Nome).ToList();
+            return await _context.Departamento.OrderBy(dep => dep.Nome).ToListAsync();
     }
     }   
 }
